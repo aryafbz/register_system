@@ -1,1 +1,2 @@
-create database register_db
+create database register_db;
+use register_db;
