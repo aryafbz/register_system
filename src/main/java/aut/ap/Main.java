@@ -43,7 +43,7 @@ public class Main {
                         System.out.println("Email: ");
                         String email = input.nextLine();
 
-                        if (checkEmail1(email))
+                        if (checkEmail(email))
                             throw new IllegalArgumentException("An account with this email already exists");
 
                         System.out.println("Password: ");
@@ -64,7 +64,7 @@ public class Main {
                         System.out.println("Password:");
                         String password = input.nextLine();
 
-                        if (!(checkEmail2(email)))
+                        if (!(checkEmail(email)))
                             throw new IllegalArgumentException("You have to Sign up");
 
                         if (password.length() < 8)
@@ -94,7 +94,7 @@ public class Main {
                 .buildSessionFactory();
     }
 
-    private static boolean checkEmail1(String email) {
+    private static boolean checkEmail(String email) {
         return sessionFactory.fromTransaction(session ->
                 session.createQuery("select count(u) from User u where u.email = :email", Long.class)
                         .setParameter("email", email)
@@ -106,14 +106,6 @@ public class Main {
         sessionFactory.inTransaction(session -> {
             session.persist(newUser);
         });
-    }
-
-    private static boolean checkEmail2(String email) {
-        return sessionFactory.fromTransaction(session ->
-                session.createQuery("select count(u) from User u where u.email = :email", Long.class)
-                        .setParameter("email", email)
-                        .getSingleResult() > 0
-        );
     }
 
     private static User getUser(String email, String password) {
