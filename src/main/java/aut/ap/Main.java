@@ -84,7 +84,6 @@ public class Main {
                 sessionFactory.close();
             }
         }
-
     }
 
     private static void setUpSessionFactory() {
@@ -94,16 +93,11 @@ public class Main {
     }
 
     private static boolean checkEmail1(String email) {
-        List<User> allUsers = sessionFactory.fromTransaction(session ->
-                session.createNativeQuery("select * from users" , User.class)
-                        .getResultList());
-
-        for (User user : allUsers) {
-            if (user.getEmail().equals(email)) {
-                return true;
-            }
-        }
-        return false;
+        return sessionFactory.fromTransaction(session ->
+                session.createQuery("select count(u) from User u where u.email = :email", Long.class)
+                        .setParameter("email", email)
+                        .getSingleResult() > 0
+        );
     }
 
     private static void addUser(User newUser) {
@@ -113,28 +107,19 @@ public class Main {
     }
 
     private static boolean checkEmail2(String email) {
-        List<User> allUsers = sessionFactory.fromTransaction(session ->
-                session.createNativeQuery("select * from users" , User.class)
-                        .getResultList());
-
-        boolean found = false;
-        for (User user : allUsers) {
-            if (user.getEmail().equals(email)) {
-                found = true;
-            }
-        }
-        return found;
+        return sessionFactory.fromTransaction(session ->
+                session.createQuery("select count(u) from User u where u.email = :email", Long.class)
+                        .setParameter("email", email)
+                        .getSingleResult() > 0
+        );
     }
 
-    private static User getUser(String email , String password) {
-        List<User> allUsers = sessionFactory.fromTransaction(session ->
-                session.createNativeQuery("select * from users" , User.class)
-                        .getResultList());
-        for (User user : allUsers) {
-            if(user.getEmail().equals(email) && user.getPassword().equals(password)) {
-                return user;
-            }
-        }
-        return null;
+    private static User getUser(String email, String password) {
+        return sessionFactory.fromTransaction(session ->
+                session.createQuery("from User u where u.email = :email and u.password = :password", User.class)
+                        .setParameter("email", email)
+                        .setParameter("password", password)
+                        .uniqueResult()
+        );
     }
 }
