@@ -13,67 +13,69 @@ public class Main {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        setUpSessionFactory();
+
 
         String command = "";
 
         while(!command.equals("0")) {
-        System.out.println("Sign up / Login:");
-        command = input.nextLine();
+            setUpSessionFactory();
+            System.out.println("Sign up / Login:");
 
-            try {
-                if (command.equals("Sign up") || command.equals("S")) {
+            command = input.nextLine();
 
-                    System.out.println("First Name: ");
-                    String firstName = input.nextLine();
+                try {
+                    if (command.equals("Sign up") || command.equals("S")) {
 
-                    System.out.println("Last Name: ");
-                    String lastName = input.nextLine();
+                        System.out.println("First Name: ");
+                        String firstName = input.nextLine();
 
-                    System.out.println("Age: ");
-                    int age = input.nextInt();
+                        System.out.println("Last Name: ");
+                        String lastName = input.nextLine();
 
-                    if (age < 0)
-                        throw new IllegalArgumentException("Age cannot be negative");
+                        System.out.println("Age: ");
+                        int age = input.nextInt();
 
-                    input.nextLine();
+                        if (age < 0)
+                            throw new IllegalArgumentException("Age cannot be negative");
 
-                    System.out.println("Email: ");
-                    String email = input.nextLine();
+                        input.nextLine();
 
-                    if (checkEmail1(email))
-                        throw new IllegalArgumentException("An account with this email already exists");
+                        System.out.println("Email: ");
+                        String email = input.nextLine();
 
-                    System.out.println("Password: ");
-                    String password = input.nextLine();
+                        if (checkEmail1(email))
+                            throw new IllegalArgumentException("An account with this email already exists");
 
-                    if (password.length() < 8)
-                        throw new IllegalArgumentException("Weak password");
+                        System.out.println("Password: ");
+                        String password = input.nextLine();
 
-                    User user = new User(firstName, lastName, age, email, password);
-                    addUser(user);
-                }
+                        if (password.length() < 8)
+                            throw new IllegalArgumentException("Weak password");
+
+                        User user = new User(firstName, lastName, age, email, password);
+                        addUser(user);
+                    }
 
 
-                if (command.equals("Login") || command.equals("L")) {
-                    System.out.println("Email:");
-                    String email = input.nextLine();
+                    if (command.equals("Login") || command.equals("L")) {
+                        System.out.println("Email:");
+                        String email = input.nextLine();
 
-                    System.out.println("Password:");
-                    String password = input.nextLine();
+                        System.out.println("Password:");
+                        String password = input.nextLine();
 
-                    if (!(checkEmail2(email)))
-                        throw new IllegalArgumentException("You have to Sign up");
+                        if (!(checkEmail2(email)))
+                            throw new IllegalArgumentException("You have to Sign up");
 
-                    if (password.length() < 8)
-                        throw new IllegalArgumentException("Password should be at least 8 characters");
+                        if (password.length() < 8)
+                            throw new IllegalArgumentException("Password should be at least 8 characters");
 
-                    User user = getUser(email, password);
+                        User user = getUser(email, password);
 
-                    if (user == null)
-                        throw new IllegalArgumentException("User not found");
+                        if (user == null)
+                            throw new IllegalArgumentException("User not found");
 
-                    System.out.println("Welcome," + user.getFirstName() + " " + user.getLastName());
+                        System.out.println("Welcome," + user.getFirstName() + " " + user.getLastName());
 
                 }
             }
